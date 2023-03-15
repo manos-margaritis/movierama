@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+
+  movierama-postgres:
+    image: "postgres:15.2-alpine"
+    container_name: movierama-postgres
+
+    volumes:
+      - movierama-data:/var/lib/postgresql/data
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./sql/fill_data.sql:/docker-entrypoint-initdb.d/fill_data.sql
+    ports:
+      - 5432:5432
+
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=P@ssw0rd
+
+  app:
+    build: ./app
+    container_name: app
+
+    environment:
+      - DB_SERVER=movierama-postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=P@ssw0rd
+    ports:
+      - 8080:8080
+    links:
+      - movierama-postgres
+
+  web:
+    build: ./web
+    container_name: web
+    ports:
+      - 4200:80
+    links:
+      - app
+
+volumes:
+  movierama-data:

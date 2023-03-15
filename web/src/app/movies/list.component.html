@@ -1,0 +1,45 @@
+﻿<h1>MovieRama</h1>
+<div id="mainComponentId">
+<a routerLink="add" class="btn btn-sm btn-success mb-2" *ngIf="user">New Movie</a>
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <ul class="navbar-nav d-flex flex-row">
+            <!-- Icons -->
+            <li class="nav-item me-3 me-lg-0"  style="pointer-events: none !important; cursor: default !important;">
+                <a class="nav-link sort-class">Sort:</a>
+            </li>
+            <li class="nav-item me-3 me-lg-0">
+                <a class="nav-link" (click)="sort('likes')">Likes</a>
+            </li>
+            <li class="nav-item me-3 me-lg-0">
+                <a class="nav-link" (click)="sort('hates')">Hates</a>
+            </li>
+            <li class="nav-item me-3 me-lg-0">
+                <a class="nav-link" (click)="sort('dates')">Dates</a>
+            </li>
+          </ul>
+          </div>
+          </nav>
+  </div>
+<div>
+<div *ngFor="let movie of movies" class="card text-center">
+    <div class="card-body">
+      <h5 class="card-title">{{movie.title}}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Posted By <a routerLink="{{movie.publisher.id}}" routerLinkActive="active">{{movie.publisher.username}}</a> {{transformDate(movie.publicationDate)}}</h6>
+      <p class="card-text">{{movie.description}}</p>
+      <button type="button" [ngClass]="{'custom-button' : user && !showLikeMessage(movie), 'custom-button-disabled' : !user || showLikeMessage(movie)}" class="custom-button" (click)="like(movie)" [disabled]="!user || showLikeMessage(movie)">{{movie.likes}} Likes</button>
+      <button type="button" [ngClass]="{'custom-button' : user && !showHateMessage(movie), 'custom-button-disabled' : !user || showHateMessage(movie)}" (click)="hate(movie)" [disabled]="!user || showHateMessage(movie)">{{movie.hates}} Hates</button>
+    </div>
+    <div class="card-footer text-muted" *ngIf=showLikeMessage(movie)><p >You like this movie</p>
+        <button type="button" class="custom-button" (click)="removeLikeHate(movie)">Unlike</button>
+    </div>
+    <div class="card-footer text-muted" *ngIf=showHateMessage(movie)><p >You hate this movie</p>
+        <button type="button" class="custom-button" (click)="removeLikeHate(movie)">Unhate</button>
+    </div>
+</div>
+</div>
+<div class="text-center" id="spinnerId" style="display: none;">
+    <span class="spinner-border spinner-border-lg align-center"></span>
+</div>

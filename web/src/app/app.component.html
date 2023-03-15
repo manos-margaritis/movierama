@@ -1,0 +1,14 @@
+﻿<nav class="navbar navbar-expand navbar-dark bg-dark px-3">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/movies" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a class="nav-item nav-link" routerLink="/account/login" routerLinkActive="active" *ngIf="!user">Login / Register</a>
+        <a class="nav-item nav-link" routerLink="/account/login" routerLinkActive="active" *ngIf="user">Welcome back {{user.username}}!</a>
+        <button class="btn btn-link nav-item nav-link" (click)="logout()" *ngIf="user">Logout</button>
+    </div>
+</nav>
+
+<div class="app-container" [ngClass]="{ 'bg-light': user }">
+    <alert></alert>
+    <router-outlet></router-outlet>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
